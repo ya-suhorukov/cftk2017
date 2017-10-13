@@ -1,84 +1,82 @@
-#include <bits/stdc++.h>
-#include <sys/time.h>
+#include <iostream>
 
-#define X first
-#define Y second
-#define forn(i,n) for(ll i=0;i<n;i++)
-#define d(x) cerr<<#x<<": "<<x<<endl;
-#define dv(x) cerr<<#x<<": ";forn(i,x.size())cerr<<x[i]<<((i+1==x.size())?'\n':' ');
+template <typename T>
+class Matrix {
+private:
+    T ** data;
+    size_t rows, columns;
 
-using namespace std;
-
-typedef long long ll;
-typedef long double ld;
-
-int main(){
-#ifdef The_Fusy 
-    freopen("input","r",stdin);  
-    freopen("output","w",stdout);
-#endif
-    string s;
-    cin>>s;
-    ll ind=0;
-    ll ans=0;
-    ll sans=0;
-    while(1){
-    	// d(ind);
-    	if(ind>=s.length()) break;
-    	char t;
-    	t = s[ind];
-    	while(t<'0' || t>'9'){
-    		// d(t);
-    		if(ind>=s.length()) break;
-    		ind++;
-    		t=s[ind];
-    	}
-    	ll now=0;
-    	ll snow=0;
-    	// d(s[ind]);
-    	while(1){
-    		t=s[ind];
-    		if(t=='.'){
-    			// d(ind+3);
-    			if(ind+3 >= s.length() || (s[ind+3]>'9' || s[ind+3]<'0')){
-    				snow+=s[ind+1]-'0';
-    				snow*=10;
-    				snow+=s[ind+2]-'0';
-    				ind+=3;
-    				break;
-    			}
-    			else ind++;
-    		}
-    		else if(t<'0' || t>'9') break;
-    		else{
-    			now*=10;
-    			now+=t-'0';
-    			ind++;
-    		}
-    	}
-    	// d(now);
-    	// d(snow);
-    	ans+=now;
-    	sans+=snow;
+public:
+    Matrix(size_t m, size_t n): rows(m), columns(n) {
+        data = new T * [rows];
+        size_t i = 0;
+        try {
+            for (; i != rows; ++i)
+                data[i] = new T[columns];
+        } catch (...) {
+            for (size_t k = 0; k != i; ++k)
+                delete [] data[k];
+            delete [] data;
+            throw;
+        }
     }
-    ans+=(sans/100);
-    sans%=100;
-    string an = to_string(ans);
-    string na;
-    ll kk=0;
-    for(ll i=an.length()-1;i>=0;i--){
-    	na+=an[i];
-    	kk++;
-    	if(i!=0 && kk%3==0) na+='.';
+
+    T* operator[](size_t i) {
+        return data[i];
     }
-    reverse(na.begin(),na.end());
-    cout<<na;
-    if(sans!=0){
-    	cout<<'.';
-    	if(sans/10==0) cout<<0;
-    	cout<<sans;
+    const T* operator[](size_t i) const {
+        return data[i];
     }
+
+    size_t GetRows() const {
+        return rows;
+    }
+
+    size_t GetColumns() const {
+        return columns;
+    }
+
+    ~Matrix() {
+        for (size_t i = 0; i != rows; ++i)
+            delete [] data[i];
+        delete [] data;
+    }
+
     
     
-    //cout<<endl<<ans<<' '<<sans;
+};
+
+
+template <typename T>
+Matrix<T> FillMatrix(size_t m, size_t n) {
+    Matrix<T> A(m, n);
+    for (size_t i = 0; i != m; ++i) {
+        std::cerr << i << std::endl;
+        for (size_t j = 0; j != n; ++j) {
+            A[i][j] = i + j;    
+            std::cerr << i << ' ' << j << std::endl;
+        }
+    }
+    return A;
+}
+
+template <typename T>
+std::ostream& operator << (std::ostream& out, const Matrix<T>& A) {
+    for (size_t i = 0; i != A.GetRows(); ++i) {
+        for (size_t j = 0; j != A.GetColumns(); ++j)
+            out << A[i][j] << " ";
+        out << "\n";
+    }
+    return out;
+}
+
+#include <iostream>
+
+int main() {
+    size_t m, n;
+    std::cin >> m >> n;
+    Matrix<int> A(m, n);
+    // ...
+    A = FillMatrix<int>(m, n);
+    std::cout << A << "\n";
 }
