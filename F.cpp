@@ -1,40 +1,82 @@
-#include <bits/stdc++.h>
-using namespace std;
-#define fo(i,a,b) for(int i=(a);i<(b);i++)
-#define MOD 1000000007
-#define MT make_tuple
-#define PB push_back
-typedef long long ll;
+#include <iostream>
 
-int N, M;
-ll a[1100], mxlo[1100][1100];
+template <typename T>
+class Matrix {
+private:
+    T ** data;
+    size_t rows, columns;
 
-int main () {
-	scanf("%d %d", &N, &M);
-	fo(i, 0, N) scanf("%lld", &a[i]);
-	for (int i = N; i--; ) fo(j, 0, N-i+1) {
-		//you haven't done this yet...
-		//mxlo[i][j] is
-		//you have already decided work for a[i]
-		//and j is how many including a[i] you just skipped
-		//comes from mxlo[i+1][j] or mxlo[i+1][j-1] ???
-		//if you keep same... then you do it
-		mxlo[i][j] = -1e18;
-		if (j != N-i) {
-			//you have to use a[i]
-			//the lowest point is either 0 or old max point + a[i]
-			mxlo[i][j] = max(mxlo[i][j], min(0ll, mxlo[i+1][j] + a[i]));
-		}
-		if (j) {
-			//skip this one
-			mxlo[i][j] = max(mxlo[i][j], mxlo[i+1][j-1]);
-		}
-	}
-	fo(z, 0, M) {
-		ll b;
-		scanf("%lld", &b);
-		int res = int(lower_bound(mxlo[0], mxlo[0] + N, -b) - mxlo[0]);
-		printf("%d\n", res);
-	}
-	return 0;
+public:
+    Matrix(size_t m, size_t n): rows(m), columns(n) {
+        data = new T * [rows];
+        size_t i = 0;
+        try {
+            for (; i != rows; ++i)
+                data[i] = new T[columns];
+        } catch (...) {
+            for (size_t k = 0; k != i; ++k)
+                delete [] data[k];
+            delete [] data;
+            throw;
+        }
+    }
+
+    T* operator[](size_t i) {
+        return data[i];
+    }
+    const T* operator[](size_t i) const {
+        return data[i];
+    }
+
+    size_t GetRows() const {
+        return rows;
+    }
+
+    size_t GetColumns() const {
+        return columns;
+    }
+
+    ~Matrix() {
+        for (size_t i = 0; i != rows; ++i)
+            delete [] data[i];
+        delete [] data;
+    }
+
+    
+    
+};
+
+
+template <typename T>
+Matrix<T> FillMatrix(size_t m, size_t n) {
+    Matrix<T> A(m, n);
+    for (size_t i = 0; i != m; ++i) {
+        std::cerr << i << std::endl;
+        for (size_t j = 0; j != n; ++j) {
+            A[i][j] = i + j;    
+            std::cerr << i << ' ' << j << std::endl;
+        }
+    }
+    return A;
+}
+
+template <typename T>
+std::ostream& operator << (std::ostream& out, const Matrix<T>& A) {
+    for (size_t i = 0; i != A.GetRows(); ++i) {
+        for (size_t j = 0; j != A.GetColumns(); ++j)
+            out << A[i][j] << " ";
+        out << "\n";
+    }
+    return out;
+}
+
+#include <iostream>
+
+int main() {
+    size_t m, n;
+    std::cin >> m >> n;
+    Matrix<int> A(m, n);
+    // ...
+    A = FillMatrix<int>(m, n);
+    std::cout << A << "\n";
 }
