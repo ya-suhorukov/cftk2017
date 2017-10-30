@@ -22,8 +22,7 @@ int main(){
     ll a,b;
     cin>>a>>b;
     vector<ll> k;
-    k.push_back(b);
-    while(1){
+    k.push_b
     	if(b==0){
     		cout<<"NO";
     		return 0;
