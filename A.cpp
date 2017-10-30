@@ -11,7 +11,7 @@ using namespace std;
 
 typedef long long ll;
 typedef long double ld;
-
+typedef unsigned long long ull;
 void solve();
 
 int main(){
@@ -19,7 +19,7 @@ int main(){
     freopen("input","r",stdin);  
     freopen("output","w",stdout);
 #endif
-    ll a,b;
+    ull a,b;
     cin>>a>>b;
     vector<ll> k;
     k.push_b
@@ -39,7 +39,7 @@ int main(){
     	}
     }
     reverse(k.begin(),k.end());
-    if(b==a){
+    if(b==a || k.size() == 0){
     	cout<<"YES\n";
     	cout<<k.size()<<endl;
     	for(ll i=0;i<k.size();i++){
